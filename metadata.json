@@ -1,0 +1,6 @@
+{
+  "name": "LionYield SGX - High Dividend Intelligence & Analytics",
+  "description": "Live Singapore Exchange high-dividend yield stocks dashboard, 5-year payout trends, ex-dividend alerts, biometric security, and exportable investment reports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
