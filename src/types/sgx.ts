@@ -42,6 +42,26 @@ export interface UpcomingDividend {
   scripDiscountPercent?: number;
   status: 'Upcoming' | 'Pending Announcement' | 'Ex-Dividends Today' | 'Paid';
   distributionType: 'Ordinary Dividend' | 'Special Dividend' | 'Taxable Income DPU' | 'Tax-Exempt DPU' | 'Capital Return';
+  periodLabel?: string; // e.g. 'Q3 2026', '2H 2026', 'Q4 2026 (Est)'
+}
+
+export interface DividendScheduleItem extends UpcomingDividend {
+  ticker: string;
+  name: string;
+  sector: Sector;
+  price: number;
+  dayChange: number;
+  dayChangePercent: number;
+  yieldPercent: number;
+  healthRating: HealthRating;
+  dpsAnnual: number;
+  payoutFrequency: PayoutFrequency;
+  daysToExDate: number;
+  daysToPayment: number;
+  payoutYield: number;
+  monthOffset: number; // 0 for Nov 2026, 1 for Dec 2026, 2 for Jan 2027, 3 for Feb 2027
+  exMonthKey: string; // '2026-11'
+  paymentMonthKey: string; // '2026-12'
 }
 
 export interface SGXStock {
@@ -68,6 +88,7 @@ export interface SGXStock {
   fiftyTwoWeekHigh: number;
   fiftyTwoWeekLow: number;
   upcomingDividend: UpcomingDividend;
+  upcomingSchedule?: UpcomingDividend[]; // Full 4-month upcoming schedule
   historicalPayouts: HistoricalPayout[];
   insights: {
     summary: string;

@@ -14,6 +14,8 @@ import { PortfolioSimulator } from './components/PortfolioSimulator';
 import { BiometricSecurityModal } from './components/BiometricSecurityModal';
 import { ReportExportModal } from './components/ReportExportModal';
 import { PrintableDossier } from './components/PrintableDossier';
+import { PastDividendsPage } from './components/PastDividendsPage';
+import { CurrentProposedDividendsPage } from './components/CurrentProposedDividendsPage';
 import { getBiometricProfile, saveBiometricProfile } from './services/biometrics';
 import {
   TrendingUp,
@@ -33,7 +35,8 @@ import {
   Flame,
   Award,
   Layers,
-  ArrowRight
+  ArrowRight,
+  History
 } from 'lucide-react';
 
 const STORAGE_HOLDINGS_KEY = 'lionyield_user_holdings';
@@ -42,7 +45,7 @@ export default function App() {
   const [stocks, setStocks] = useState<SGXStock[]>(INITIAL_SGX_STOCKS);
   const [marketMetrics, setMarketMetrics] = useState<MarketMetrics>(INITIAL_MARKET_METRICS);
   const [selectedStock, setSelectedStock] = useState<SGXStock>(INITIAL_SGX_STOCKS[0]);
-  const [activeTab, setActiveTab] = useState<'overview' | 'leaderboard' | 'trends' | 'alerts' | 'portfolio'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'proposed' | 'past' | 'leaderboard' | 'portfolio'>('overview');
   const [isLiveActive, setIsLiveActive] = useState<boolean>(true);
   const [lastTickTime, setLastTickTime] = useState<Date>(new Date());
   const [isApiLoading, setIsApiLoading] = useState<boolean>(false);
@@ -254,33 +257,31 @@ export default function App() {
             Dashboard
           </button>
           <button
+            onClick={() => setActiveTab('proposed')}
+            className={`transition-colors whitespace-nowrap shrink-0 hover:text-slate-100 flex items-center gap-1.5 ${
+              activeTab === 'proposed' ? 'text-emerald-400 font-semibold' : ''
+            }`}
+          >
+            <span>Current Dividends</span>
+            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+              Live
+            </span>
+          </button>
+          <button
+            onClick={() => setActiveTab('past')}
+            className={`transition-colors whitespace-nowrap shrink-0 hover:text-slate-100 ${
+              activeTab === 'past' ? 'text-emerald-400 font-semibold' : ''
+            }`}
+          >
+            Past Dividends
+          </button>
+          <button
             onClick={() => setActiveTab('leaderboard')}
             className={`transition-colors whitespace-nowrap shrink-0 hover:text-slate-100 ${
               activeTab === 'leaderboard' ? 'text-emerald-400 font-semibold' : ''
             }`}
           >
-            High-Yield Rankings
-          </button>
-          <button
-            onClick={() => setActiveTab('trends')}
-            className={`transition-colors whitespace-nowrap shrink-0 hover:text-slate-100 ${
-              activeTab === 'trends' ? 'text-emerald-400 font-semibold' : ''
-            }`}
-          >
-            5-Year Trends
-          </button>
-          <button
-            onClick={() => setActiveTab('alerts')}
-            className={`transition-colors whitespace-nowrap shrink-0 hover:text-slate-100 flex items-center gap-1.5 ${
-              activeTab === 'alerts' ? 'text-emerald-400 font-semibold' : ''
-            }`}
-          >
-            <span>Announcements</span>
-            {alerts.length > 0 && (
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                {alerts.length}
-              </span>
-            )}
+            Yield Rankings
           </button>
           <button
             onClick={() => setActiveTab('portfolio')}
@@ -288,7 +289,7 @@ export default function App() {
               activeTab === 'portfolio' ? 'text-emerald-400 font-semibold' : ''
             }`}
           >
-            Portfolio & Planner
+            Portfolio Planner
           </button>
         </nav>
 
@@ -396,7 +397,7 @@ export default function App() {
           <div
             onClick={() => {
               setSelectedStock(topYieldStock);
-              setActiveTab('trends');
+              setActiveTab('past');
             }}
             className="group bg-[#111827] border border-slate-800 hover:border-emerald-500/40 rounded-xl p-4 cursor-pointer transition-all shadow-md"
           >
@@ -438,11 +439,11 @@ export default function App() {
 
           {/* Upcoming Announcements */}
           <div
-            onClick={() => setActiveTab('alerts')}
+            onClick={() => setActiveTab('proposed')}
             className="group bg-[#111827] border border-slate-800 hover:border-cyan-500/40 rounded-xl p-4 cursor-pointer transition-all shadow-md"
           >
             <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
-              <span>Upcoming Ex-Dates</span>
+              <span>Proposed & Ex-Dates</span>
               <Calendar className="w-4 h-4 text-sky-400" />
             </div>
             <div className="flex items-baseline gap-2">
@@ -497,7 +498,7 @@ export default function App() {
               selectedStock={selectedStock}
               onSelectStock={(stock) => {
                 setSelectedStock(stock);
-                setActiveTab('trends');
+                setActiveTab('past');
               }}
               sgsYield={marketMetrics.sgs10YearBondYield}
               stiAverageYield={marketMetrics.averageSgxYield}
@@ -513,10 +514,11 @@ export default function App() {
                   stocks={stocks}
                   onSelectStock={(stock) => {
                     setSelectedStock(stock);
-                    setActiveTab('trends');
+                    setActiveTab('past');
                   }}
                   alerts={alerts}
                   onDismissAlert={handleDismissAlert}
+                  onViewProposedTabs={() => setActiveTab('proposed')}
                 />
               </div>
             </div>
@@ -527,9 +529,37 @@ export default function App() {
               selectedStock={selectedStock}
               onSelectStock={(stock) => {
                 setSelectedStock(stock);
-                setActiveTab('trends');
+                setActiveTab('past');
               }}
             />
+          </div>
+        )}
+
+        {/* SUB PAGE: Current Share Prices & Proposed Dividends */}
+        {activeTab === 'proposed' && (
+          <div className="space-y-6">
+            <CurrentProposedDividendsPage
+              stocks={stocks}
+              onSelectStock={(stock) => {
+                setSelectedStock(stock);
+                setActiveTab('past');
+              }}
+              onRefreshLivePrices={() => fetchLiveSGXPrices(true)}
+              isApiLoading={isApiLoading}
+              lastSyncedTime={apiStatus.lastSynced}
+            />
+          </div>
+        )}
+
+        {/* SUB PAGE: Past Dividends Ledger & Historical Deep-Dive */}
+        {activeTab === 'past' && (
+          <div className="space-y-6">
+            <PastDividendsPage
+              stocks={stocks}
+              onSelectStock={(stock) => setSelectedStock(stock)}
+            />
+            {/* Deep-Dive View on Selected Stock */}
+            <HistoricalPayoutView stock={selectedStock} />
           </div>
         )}
 
@@ -540,7 +570,7 @@ export default function App() {
               selectedStock={selectedStock}
               onSelectStock={(stock) => {
                 setSelectedStock(stock);
-                setActiveTab('trends');
+                setActiveTab('past');
               }}
             />
             <YieldRankingChart
@@ -548,62 +578,10 @@ export default function App() {
               selectedStock={selectedStock}
               onSelectStock={(stock) => {
                 setSelectedStock(stock);
-                setActiveTab('trends');
+                setActiveTab('past');
               }}
               sgsYield={marketMetrics.sgs10YearBondYield}
               stiAverageYield={marketMetrics.averageSgxYield}
-            />
-          </div>
-        )}
-
-        {activeTab === 'trends' && (
-          <div className="space-y-6">
-            {/* Stock Selector Pill Bar */}
-            <div className="bg-[#111827] border border-slate-800 rounded-xl p-4">
-              <span className="text-xs font-semibold text-slate-400 block mb-2 uppercase tracking-wider">
-                Select SGX Stock for 5-Year Deep Dive Analysis
-              </span>
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-                {stocks.map((s) => (
-                  <button
-                    key={s.ticker}
-                    onClick={() => setSelectedStock(s)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium whitespace-nowrap transition-colors ${
-                      selectedStock.ticker === s.ticker
-                        ? 'bg-emerald-500 text-slate-950 font-bold shadow-md'
-                        : 'bg-slate-900 text-slate-300 border border-slate-800 hover:bg-slate-800'
-                    }`}
-                  >
-                    {s.ticker} ({s.yieldPercent.toFixed(1)}%)
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Historical 5-Year Payout View */}
-            <HistoricalPayoutView stock={selectedStock} />
-
-            {/* Yield Ranking Chart for Relative Context */}
-            <YieldRankingChart
-              stocks={stocks}
-              selectedStock={selectedStock}
-              onSelectStock={(stock) => setSelectedStock(stock)}
-              sgsYield={marketMetrics.sgs10YearBondYield}
-              stiAverageYield={marketMetrics.averageSgxYield}
-            />
-          </div>
-        )}
-
-        {activeTab === 'alerts' && (
-          <div className="space-y-6">
-            <UpcomingDividendsAlerts
-              stocks={stocks}
-              onSelectStock={(stock) => {
-                setSelectedStock(stock);
-                setActiveTab('trends');
-              }}
-              alerts={alerts}
-              onDismissAlert={handleDismissAlert}
             />
           </div>
         )}
@@ -636,6 +614,26 @@ export default function App() {
         </button>
 
         <button
+          onClick={() => setActiveTab('proposed')}
+          className={`flex flex-col items-center gap-1 p-1 rounded-md transition-colors ${
+            activeTab === 'proposed' ? 'text-emerald-400 font-semibold' : 'text-slate-400'
+          }`}
+        >
+          <Calendar className="w-4 h-4" />
+          <span>Proposed</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('past')}
+          className={`flex flex-col items-center gap-1 p-1 rounded-md transition-colors ${
+            activeTab === 'past' ? 'text-emerald-400 font-semibold' : 'text-slate-400'
+          }`}
+        >
+          <History className="w-4 h-4" />
+          <span>Past</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('leaderboard')}
           className={`flex flex-col items-center gap-1 p-1 rounded-md transition-colors ${
             activeTab === 'leaderboard' ? 'text-emerald-400 font-semibold' : 'text-slate-400'
@@ -643,29 +641,6 @@ export default function App() {
         >
           <ListOrdered className="w-4 h-4" />
           <span>Ranks</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('trends')}
-          className={`flex flex-col items-center gap-1 p-1 rounded-md transition-colors ${
-            activeTab === 'trends' ? 'text-emerald-400 font-semibold' : 'text-slate-400'
-          }`}
-        >
-          <TrendingUp className="w-4 h-4" />
-          <span>5Y Trends</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('alerts')}
-          className={`flex flex-col items-center gap-1 p-1 rounded-md transition-colors relative ${
-            activeTab === 'alerts' ? 'text-emerald-400 font-semibold' : 'text-slate-400'
-          }`}
-        >
-          <Bell className="w-4 h-4" />
-          <span>Alerts</span>
-          {alerts.length > 0 && (
-            <span className="absolute top-0 right-2 w-2 h-2 rounded-full bg-amber-400" />
-          )}
         </button>
 
         <button

@@ -13,6 +13,7 @@ interface UpcomingDividendsAlertsProps {
   onSelectStock: (stock: SGXStock) => void;
   alerts: AlertItem[];
   onDismissAlert: (id: string) => void;
+  onViewProposedTabs?: () => void;
 }
 
 export const UpcomingDividendsAlerts: React.FC<UpcomingDividendsAlertsProps> = ({
@@ -20,6 +21,7 @@ export const UpcomingDividendsAlerts: React.FC<UpcomingDividendsAlertsProps> = (
   onSelectStock,
   alerts,
   onDismissAlert,
+  onViewProposedTabs,
 }) => {
   const [filterMode, setFilterMode] = useState<'all' | 'imminent' | 'alerts'>('imminent');
   const [notificationStatus, setNotificationStatus] = useState<string | null>(null);
@@ -88,6 +90,17 @@ export const UpcomingDividendsAlerts: React.FC<UpcomingDividendsAlertsProps> = (
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* Action: Open 4-Month Sub-Tabs */}
+          {onViewProposedTabs && (
+            <button
+              onClick={onViewProposedTabs}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20 transition-colors"
+            >
+              <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+              <span>4-Month Sub-Tabs</span>
+            </button>
+          )}
+
           {/* Action: Add to Calendar */}
           <button
             onClick={() => downloadDividendCalendarICS(stocks)}
@@ -101,9 +114,9 @@ export const UpcomingDividendsAlerts: React.FC<UpcomingDividendsAlertsProps> = (
           {/* Action: Enable Notifications */}
           <button
             onClick={requestBrowserNotification}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-colors"
           >
-            <Bell className="w-3.5 h-3.5 text-emerald-400" />
+            <Bell className="w-3.5 h-3.5 text-amber-400" />
             Alerts
           </button>
         </div>

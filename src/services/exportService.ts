@@ -175,3 +175,66 @@ export const downloadDividendCalendarICS = (stocks: SGXStock[]) => {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 };
+
+export interface CalendarEventItem {
+  ticker: string;
+  name: string;
+  amount: number;
+  exDate: string;
+  paymentDate: string;
+  yieldPercent?: number;
+  periodLabel?: string;
+  distributionType?: string;
+}
+
+export const downloadScheduleEventsICS = (
+  eventsList: CalendarEventItem[],
+  filename = 'SGX_Dividend_Schedule.ics'
+) => {
+  const events = eventsList
+    .map((item) => {
+      const exDateClean = item.exDate.replace(/-/g, '');
+      const payDateClean = item.paymentDate.replace(/-/g, '');
+      const label = item.periodLabel ? ` (${item.periodLabel})` : '';
+      return [
+        'BEGIN:VEVENT',
+        `SUMMARY:SGX Ex-Div: ${item.ticker} - ${item.name}${label}`,
+        `DESCRIPTION:${item.name} (${item.ticker}) Ex-Dividend Date.\\nDistribution: S$${item.amount.toFixed(4)} per share\\nPayment Date: ${item.paymentDate}${item.yieldPercent ? `\\nYield: ${item.yieldPercent.toFixed(2)}%` : ''}${item.distributionType ? `\\nType: ${item.distributionType}` : ''}`,
+        `DTSTART;VALUE=DATE:${exDateClean}`,
+        `DTEND;VALUE=DATE:${exDateClean}`,
+        `UID:sgx-ex-${item.ticker}-${exDateClean}@lionyield.sg`,
+        'STATUS:CONFIRMED',
+        'END:VEVENT',
+        'BEGIN:VEVENT',
+        `SUMMARY:SGX Dividend Payout: ${item.ticker} - S$${item.amount.toFixed(4)}${label}`,
+        `DESCRIPTION:${item.name} (${item.ticker}) Dividend Payment Date.\\nCash distribution: S$${item.amount.toFixed(4)} per share.`,
+        `DTSTART;VALUE=DATE:${payDateClean}`,
+        `DTEND;VALUE=DATE:${payDateClean}`,
+        `UID:sgx-pay-${item.ticker}-${payDateClean}@lionyield.sg`,
+        'STATUS:CONFIRMED',
+        'END:VEVENT',
+      ].join('\r\n');
+    })
+    .join('\r\n');
+
+  const icsBody = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//LionYield SGX Dividend Intelligence//SG//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    events,
+    'END:VCALENDAR',
+  ].join('\r\n');
+
+  const blob = new Blob([icsBody], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
