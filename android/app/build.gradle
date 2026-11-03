@@ -1,0 +1,67 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'in.aisathya.bseyield'
+    compileSdk 35
+    buildToolsVersion '35.0.0'
+
+    defaultConfig {
+        applicationId 'in.aisathya.bseyield'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        debug {
+            // Standard local debug key, intentionally outside the repository.
+            storeFile file(System.getenv('BSE_DEBUG_KEYSTORE') ?: "${System.getProperty('user.home')}/.android/debug.keystore")
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            // Installable distribution build with debug signing, not WebView debugging.
+            debuggable false
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets {
+        main.assets.srcDirs = [layout.buildDirectory.dir('generated/webAssets')]
+    }
+}
+
+def webDist = providers.gradleProperty('webDist').map { file(it) }.getOrElse(file('../../dist'))
+def bundleWeb = tasks.register('bundleWeb', Sync) {
+    from(webDist)
+    from(rootProject.file('native-assets'))
+    into(layout.buildDirectory.dir('generated/webAssets'))
+    doFirst {
+        if (!new File(webDist, 'index.html').isFile()) {
+            throw new GradleException('Real dashboard dist/index.html is required. Run npm run build first.')
+        }
+        if (!new File(webDist, 'data/bse-high-yield.json').isFile()
+                && !new File(webDist, 'data/bse-announcements.json').isFile()) {
+            throw new GradleException('Real offline BSE snapshot or announcements JSON is required; refusing a placeholder APK.')
+        }
+    }
+}
+tasks.configureEach {
+    if (name.matches('merge.*Assets') || name.toLowerCase().contains('lint')) {
+        dependsOn(bundleWeb)
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+}

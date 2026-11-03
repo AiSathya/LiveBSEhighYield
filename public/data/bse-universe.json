@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "source": "https://assets.upstox.com/market-quote/instruments/exchange/BSE.json.gz",
+  "downloadedAt": "2026-11-03T06:19:59.887952Z",
+  "selection": "Recognizable dividend candidates selected by symbol from the bulk registry; not a yield ranking or investment recommendation. Names are verbatim provider registry names and may be truncated.",
+  "stocks": [
+    {
+      "ticker": "RELIANCE",
+      "bseCode": "500325",
+      "isin": "INE002A01018",
+      "instrumentKey": "BSE_EQ|INE002A01018",
+      "name": "RELIANCE INDUSTRIES LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "TCS",
+      "bseCode": "532540",
+      "isin": "INE467B01029",
+      "instrumentKey": "BSE_EQ|INE467B01029",
+      "name": "TATA CONSULTANCY SERVICES LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "INFY",
+      "bseCode": "500209",
+      "isin": "INE009A01021",
+      "instrumentKey": "BSE_EQ|INE009A01021",
+      "name": "INFOSYS LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "HDFCBANK",
+      "bseCode": "500180",
+      "isin": "INE040A01034",
+      "instrumentKey": "BSE_EQ|INE040A01034",
+      "name": "HDFC BANK LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "ICICIBANK",
+      "bseCode": "532174",
+      "isin": "INE090A01021",
+      "instrumentKey": "BSE_EQ|INE090A01021",
+      "name": "ICICI BANK LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "ITC",
+      "bseCode": "500875",
+      "isin": "INE154A01025",
+      "instrumentKey": "BSE_EQ|INE154A01025",
+      "name": "ITC LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "HINDUNILVR",
+      "bseCode": "500696",
+      "isin": "INE030A01027",
+      "instrumentKey": "BSE_EQ|INE030A01027",
+      "name": "HINDUSTAN UNILEVER LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "SBIN",
+      "bseCode": "500112",
+      "isin": "INE062A01020",
+      "instrumentKey": "BSE_EQ|INE062A01020",
+      "name": "STATE BANK OF INDIA",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "LT",
+      "bseCode": "500510",
+      "isin": "INE018A01030",
+      "instrumentKey": "BSE_EQ|INE018A01030",
+      "name": "LARSEN & TOUBRO LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "HCLTECH",
+      "bseCode": "532281",
+      "isin": "INE860A01027",
+      "instrumentKey": "BSE_EQ|INE860A01027",
+      "name": "HCL TECHNOLOGIES LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "POWERGRID",
+      "bseCode": "532898",
+      "isin": "INE752E01010",
+      "instrumentKey": "BSE_EQ|INE752E01010",
+      "name": "POWER GRID CORPORATION OF INDI",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "NTPC",
+      "bseCode": "532555",
+      "isin": "INE733E01010",
+      "instrumentKey": "BSE_EQ|INE733E01010",
+      "name": "NTPC LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "COALINDIA",
+      "bseCode": "533278",
+      "isin": "INE522F01014",
+      "instrumentKey": "BSE_EQ|INE522F01014",
+      "name": "COAL INDIA LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "ONGC",
+      "bseCode": "500312",
+      "isin": "INE213A01029",
+      "instrumentKey": "BSE_EQ|INE213A01029",
+      "name": "OIL AND NATURAL GAS CORPORATIO",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "TATASTEEL",
+      "bseCode": "500470",
+      "isin": "INE081A01020",
+      "instrumentKey": "BSE_EQ|INE081A01020",
+      "name": "TATA STEEL LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "IOC",
+      "bseCode": "530965",
+      "isin": "INE242A01010",
+      "instrumentKey": "BSE_EQ|INE242A01010",
+      "name": "INDIAN OIL CORPORATION LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "BPCL",
+      "bseCode": "500547",
+      "isin": "INE029A01011",
+      "instrumentKey": "BSE_EQ|INE029A01011",
+      "name": "BHARAT PETROLEUM CORPORATION L",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "GAIL",
+      "bseCode": "532155",
+      "isin": "INE129A01019",
+      "instrumentKey": "BSE_EQ|INE129A01019",
+      "name": "GAIL (INDIA) LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "VEDL",
+      "bseCode": "500295",
+      "isin": "INE205A01025",
+      "instrumentKey": "BSE_EQ|INE205A01025",
+      "name": "VEDANTA LIMITED",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    },
+    {
+      "ticker": "HINDZINC",
+      "bseCode": "500188",
+      "isin": "INE267A01025",
+      "instrumentKey": "BSE_EQ|INE267A01025",
+      "name": "HINDUSTAN ZINC LTD.",
+      "sector": "Unclassified",
+      "segment": "BSE_EQ",
+      "instrumentType": "A"
+    }
+  ]
+}

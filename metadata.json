@@ -1,6 +1,6 @@
 {
-  "name": "LionYield SGX - High Dividend Intelligence & Analytics",
-  "description": "Live Singapore Exchange high-dividend yield stocks dashboard, 5-year payout trends, ex-dividend alerts, biometric security, and exportable investment reports.",
+  "name": "BSE High Yield",
+  "description": "A selected BSE dividend watchlist with sourced INR quotes, trailing dividend yield rankings, dividend records and a local portfolio planner. Data availability and timestamps are shown explicitly.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": []
 }

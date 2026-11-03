@@ -6,3 +6,14 @@ coverage/
 *.log
 .env*
 !.env.example
+output/
+android/.gradle/
+android/local.properties
+android/app/build/
+android/app/src/main/assets/
+*.keystore
+*.jks
+__pycache__/
+*.pyc
+.bse-refresh-*.json
+.cache/

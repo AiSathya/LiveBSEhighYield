@@ -1,0 +1,55 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'android/**'
+      - 'scripts/build-android.sh'
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'vite.config.ts'
+      - '.github/workflows/android-apk.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Install Android SDK components
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'platform-tools'
+      - name: Install dashboard dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Compile dashboard
+        run: pnpm build
+      - name: Build and verify debug-signed APK
+        run: bash scripts/build-android.sh --skip-web
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LiveBSEhighYield-debug-signed
+          path: |
+            output/LiveBSEhighYield.apk
+            output/LiveBSEhighYield.apk.sha256
+            output/LiveBSEhighYield.signing.txt
+            output/LiveBSEhighYield.metadata.txt
+          if-no-files-found: error
+          retention-days: 30

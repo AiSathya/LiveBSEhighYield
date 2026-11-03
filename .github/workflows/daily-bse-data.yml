@@ -1,0 +1,60 @@
+name: Daily BSE data
+
+on:
+  schedule:
+    # 12:45 UTC = 18:15 India Standard Time; GitHub may delay scheduled runs.
+    - cron: '45 12 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: daily-bse-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      UPSTOX_ANALYTICS_TOKEN: ${{ secrets.UPSTOX_ANALYTICS_TOKEN }}
+      BSE_PUBLIC_DATA_REDISTRIBUTION_CONFIRMED: ${{ vars.BSE_PUBLIC_DATA_REDISTRIBUTION_CONFIRMED }}
+      UPSTOX_DIVIDEND_HISTORY_CONFIRMED: ${{ vars.UPSTOX_DIVIDEND_HISTORY_CONFIRMED }}
+    steps:
+      - name: Confirm read-only access and public data rights
+        shell: bash
+        run: |
+          if [[ -z "$UPSTOX_ANALYTICS_TOKEN" ]]; then
+            echo '::warning::Missing UPSTOX_ANALYTICS_TOKEN repository secret. Generate a one-year read-only Analytics Token in Upstox Developer Apps; existing snapshot will not be overwritten.'
+            exit 1
+          fi
+          if [[ "$BSE_PUBLIC_DATA_REDISTRIBUTION_CONFIRMED" != "true" ]]; then
+            echo '::error::Public publishing is blocked. Obtain provider/exchange permission for public display/redistribution, then set repository variable BSE_PUBLIC_DATA_REDISTRIBUTION_CONFIRMED=true. Free API access is not a redistribution licence.'
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test normalization and fail-closed behavior
+        run: python3 -m unittest discover -s tests -v
+      - name: Update documented BSE registry and snapshot
+        run: python3 scripts/update_bse_data.py --refresh-universe --public-output --cache "$RUNNER_TEMP/bse-actions.json"
+      - name: Commit only a successful snapshot
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/data/bse-universe.json public/data/bse-high-yield.json
+          if git diff --cached --quiet; then
+            echo 'No snapshot changes.'
+            exit 0
+          fi
+          git commit -m 'data: refresh documented Upstox BSE snapshot'
+          git pull --rebase origin "${{ github.event.repository.default_branch }}"
+          git push origin "HEAD:${{ github.event.repository.default_branch }}"

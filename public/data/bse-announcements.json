@@ -1,0 +1,13 @@
+{
+  "source": "BSE Corporate Actions",
+  "sourceUrl": "https://www.bseindia.com/corporates/corporate_act",
+  "retrievedAt": "2026-11-03T06:15:22Z",
+  "coverage": "Selected announcements only; not a complete dividend history and not a live feed.",
+  "events": [
+    {"bseCode":"500830","name":"Colgate Palmolive (India) Ltd","date":"2026-11-02","amount":24,"currency":"INR","kind":"Interim","paymentDate":null},
+    {"bseCode":"500209","name":"Infosys Ltd","date":"2026-11-03","amount":26,"currency":"INR","kind":"Interim","paymentDate":null},
+    {"bseCode":"533278","name":"Coal India Ltd","date":"2026-11-04","amount":10.25,"currency":"INR","kind":"Interim","paymentDate":null},
+    {"bseCode":"532178","name":"Engineers India Ltd","date":"2026-11-05","amount":1.5,"currency":"INR","kind":"Interim","paymentDate":null},
+    {"bseCode":"532733","name":"Sun TV Network Ltd","date":"2026-11-05","amount":3.75,"currency":"INR","kind":"Interim","paymentDate":null}
+  ]
+}
